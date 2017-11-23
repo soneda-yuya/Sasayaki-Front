@@ -8,24 +8,50 @@ const abi = require('./abi.json');
 const vm = new Vue({
   el: '#index',
   data: {
+    metamask: false,
     new_message: '',
     messages: [],
+    web3: undefined,
+    contract: undefined,
+    writing: false,
   },
   methods: {
     toggleSidenav() {
       this.$refs.sidenav.toggle();
     },
+    post() {
+      if (!this.metamask || this.new_message === '') {
+        return;
+      }
+      this.writing = true;
+      this.web3.eth.getAccounts()
+        .then(accounts => this.contract.methods.Sasayaku(this.new_message).send({ from: accounts[0] }))
+        .then((result) => {
+          this.new_message = '';
+          this.writing = false;
+          console.info(result);
+        });
+    },
+    update() {
+      this.contract.methods.id().call()
+        .then((id) => {
+          const list = [];
+          for (let i = id; i >= 1 && i >= id - 10; i--) {
+            list.push(this.contract.methods.messages(i - 1).call());
+          }
+          return Promise.all(list);
+        })
+        .then((messages) => {
+          this.messages = messages;
+          setTimeout(this.update, 1000);
+        });
+    },
   },
   mounted() {
-    const web3 = new Web3();
-    web3.setProvider(new web3.providers.HttpProvider(config.ethProvider));
-
-    const contract = new web3.eth.Contract(abi, '0x8cadd64ed77c96b3358b4be3533f48dda2a99a24');
-
-    contract.methods.id().call()
-      .then(id => contract.methods.messages(id - 1).call())
-      .then((message) => {
-        this.messages.push(message);
-      });
+    this.metamask = !!global.window.web3;
+    this.web3 = new Web3();
+    this.web3.setProvider(this.metamask ? window.web3.currentProvider : new this.web3.providers.HttpProvider(config.ethProvider));
+    this.contract = new this.web3.eth.Contract(abi, config.contract);
+    this.update();
   },
 });

@@ -36,11 +36,11 @@
         <div class="md-title">Sasayaki</div>
         <div class="md-subhead">Simple bulletin board.</div>
       </md-card-header>
-      <md-card-content>
+      <md-card-content v-if="metamask">
         <md-input-container>
           <md-input v-model="new_message" placeholder="new message"></md-input>
         </md-input-container>
-        <md-button class="md-raised md-primary">post</md-button>
+        <md-button class="md-raised md-primary" @click="post" :disabled="writing">post</md-button>
       </md-card-content>
     </md-card>
   </div>
