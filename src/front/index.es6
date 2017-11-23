@@ -1,4 +1,5 @@
 import Web3 from 'web3';
+import moment from 'moment';
 import Vue from './main.es6';
 
 const config = require('../../config/config.json');
@@ -45,6 +46,9 @@ const vm = new Vue({
           this.messages = messages;
           setTimeout(this.update, 1000);
         });
+    },
+    formatDate(date) {
+      return moment.unix(date).format('YYYY-MM-DD HH:mm:ss Z');
     },
   },
   mounted() {

@@ -48,7 +48,7 @@
     <md-card>
       <md-card-header>
         <div class="md-title">by {{message.writer}}</div>
-        <div class="md-subhead">{{new Date(message.timestamp * 1000)}}</div>
+        <div class="md-subhead">{{formatDate(message.timestamp)}}</div>
       </md-card-header>
       <md-card-content>
         <p>{{message.message}}</p>
