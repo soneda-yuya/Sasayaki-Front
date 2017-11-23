@@ -50,7 +50,7 @@ const vm = new Vue({
   mounted() {
     this.metamask = !!global.window.web3;
     this.web3 = new Web3();
-    this.web3.setProvider(this.metamask ? window.web3.currentProvider : new this.web3.providers.HttpProvider(config.ethProvider));
+    this.web3.setProvider(this.metamask ? global.window.web3.currentProvider : new this.web3.providers.HttpProvider(config.ethProvider));
     this.contract = new this.web3.eth.Contract(abi, config.contract);
     this.update();
   },
