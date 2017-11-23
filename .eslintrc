@@ -1,0 +1,25 @@
+{
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "max-len": [
+      "off"
+    ],
+    "no-plusplus": [
+      "off"
+    ],
+    "import/no-dynamic-require": [
+      "off"
+    ],
+    "no-console": [
+      "error",
+      { "allow": ["info", "warn", "error"] }
+    ],
+  },
+  "extends": "airbnb",
+  "plugins": [
+    "jsx-a11y",
+    "import"
+  ]
+}

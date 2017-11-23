@@ -1,0 +1,50 @@
+{
+  "name": "payment",
+  "version": "1.0.0",
+  "description": "payment",
+  "main": "index.js",
+  "scripts": {
+    "build:babel": "babel src/server -d dest/server",
+    "build:babel:watch": "babel -w src/server -d dest/server",
+    "build:webpack": "webpack",
+    "build:webpack:watch": "webpack --watch",
+    "clean": "rm -rf dest",
+    "build": "npm run clean && npm-run-all --parallel build:babel build:webpack",
+    "build:watch": "npm run clean && npm-run-all --parallel build:*:watch",
+    "build:start": "npm run clean && npm-run-all --parallel build:*:watch start:watch",
+    "start:watch": "nodemon dest/server/index.js",
+    "start": "node dest/server/index.js",
+    "lint": "eslint ./src/**/*.es6",
+    "lint:fix": "eslint ./src/**/*.es6 --fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/C-130/Payment.git"
+  },
+  "author": "yukkuri_sinai",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/C-130/Paymentissues"
+  },
+  "homepage": "https://github.com/C-130/Payment#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "serve-favicon": "^2.4.3",
+    "vue": "^2.4.2",
+    "vue-material": "^0.7.4",
+    "web3": "^1.0.0-beta.24"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.4.0",
+    "nodemon": "^1.11.0",
+    "npm-run-all": "^4.0.2",
+    "webpack": "^3.4.1"
+  }
+}

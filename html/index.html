@@ -1,0 +1,61 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link href="/style/style.css" rel="stylesheet"/>
+  <title>Sasayaki</title>
+</head>
+<body>
+<div id="index">
+  <md-toolbar>
+    <md-button class="md-icon-button" @click="toggleSidenav">
+      <md-icon>menu</md-icon>
+    </md-button>
+    <h2 class="md-title" style="flex: 1">Sasayaki</h2>
+  </md-toolbar>
+  <md-sidenav class="md-left" ref="sidenav">
+    <md-toolbar>
+      <div class="md-toolbar-container">
+        <h3 class="md-title"><md-icon>info_outline</md-icon> Navigation</h3>
+      </div>
+    </md-toolbar>
+    <md-list>
+      <md-list-item href="https://yukkurisinai.net">
+        <md-icon>face</md-icon>
+        <span>Admin</span>
+      </md-list-item>
+      <md-list-item href="mailto:yukkuri.sinai@gmail.com">
+        <md-icon>contact_mail</md-icon>
+        <span>Contact</span>
+      </md-list-item>
+    </md-list>
+  </md-sidenav>
+  <div class="main-content">
+    <md-card>
+      <md-card-header>
+        <div class="md-title">Sasayaki</div>
+        <div class="md-subhead">Simple bulletin board.</div>
+      </md-card-header>
+      <md-card-content>
+        <md-input-container>
+          <md-input v-model="new_message" placeholder="new message"></md-input>
+        </md-input-container>
+        <md-button class="md-raised md-primary">post</md-button>
+      </md-card-content>
+    </md-card>
+  </div>
+  <div class="main-content" v-for="message in messages">
+    <md-card>
+      <md-card-header>
+        <div class="md-title">by {{message.writer}}</div>
+        <div class="md-subhead">{{new Date(message.timestamp * 1000)}}</div>
+      </md-card-header>
+      <md-card-content>
+        <p>{{message.message}}</p>
+      </md-card-content>
+    </md-card>
+  </div>
+</div>
+<script src="/js/index.bundle.js"></script>
+</body>
+</html>
