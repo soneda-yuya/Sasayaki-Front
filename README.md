@@ -1,6 +1,4 @@
-# Platform
-
-The platform that support Airdrop.
+# Sasayaki
 
 ## License
 
