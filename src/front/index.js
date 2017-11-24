@@ -1,6 +1,6 @@
 import Web3 from 'web3';
 import moment from 'moment';
-import Vue from './main.es6';
+import Vue from './main.js';
 
 const config = require('../../config/config.json');
 const abi = require('./abi.json');
@@ -26,11 +26,25 @@ const vm = new Vue({
       }
       this.writing = true;
       this.web3.eth.getAccounts()
-        .then(accounts => this.contract.methods.Sasayaku(this.new_message).send({ from: accounts[0] }))
-        .then((result) => {
-          this.new_message = '';
-          this.writing = false;
-          console.info(result);
+        .then((accounts) => {
+          try {
+            this.contract.methods.Sasayaku(this.new_message).send({ from: accounts[0] })
+              .on('transactionHash', (hash) => {
+                console.info(hash);
+                this.new_message = '';
+                this.writing = false;
+              })
+              .on('receipt', (receipt) => {
+                console.info(receipt);
+              })
+              .on('error', (error) => {
+                console.error(error);
+                this.writing = false;
+              });
+          } catch (e) {
+            console.error(e);
+            this.writing = false;
+          }
         });
     },
     update() {

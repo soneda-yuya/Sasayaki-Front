@@ -38,9 +38,10 @@
       </md-card-header>
       <md-card-content v-if="metamask">
         <md-input-container>
-          <md-input v-model="new_message" placeholder="new message"></md-input>
+          <md-input v-model="new_message" placeholder="new message" :disabled="writing"></md-input>
         </md-input-container>
-        <md-button class="md-raised md-primary" @click="post" :disabled="writing">post</md-button>
+        <md-progress md-indeterminate v-if="writing"></md-progress>
+        <md-button class="md-raised md-primary" @click="post" :disabled="!new_message" v-else>post</md-button>
       </md-card-content>
     </md-card>
   </div>
