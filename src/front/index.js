@@ -15,6 +15,7 @@ const vm = new Vue({
     web3: undefined,
     contract: undefined,
     writing: false,
+    transactions: [],
   },
   methods: {
     toggleSidenav() {
@@ -33,17 +34,31 @@ const vm = new Vue({
                 console.info(hash);
                 this.new_message = '';
                 this.writing = false;
+                this.transactions.push(hash);
               })
               .on('receipt', (receipt) => {
                 console.info(receipt);
+                for (let i = 0; i < this.transactions.length; i++) {
+                  if (this.transactions[i] === receipt.transactionHash) {
+                    this.transactions.splice(i, 1);
+                    return;
+                  }
+                }
+                if (receipt.status === '0x0') {
+                  this.$refs.error.open();
+                }
               })
               .on('error', (error) => {
                 console.error(error);
+                this.$refs.error.open();
                 this.writing = false;
+                this.transactions = [];
               });
           } catch (e) {
             console.error(e);
+            this.$refs.error.open();
             this.writing = false;
+            this.transactions = [];
           }
         });
     },

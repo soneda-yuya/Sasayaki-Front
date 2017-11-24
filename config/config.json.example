@@ -1,4 +1,5 @@
 {
   "ethProvider": "",
+  "contract": "",
   "port": 3000
 }

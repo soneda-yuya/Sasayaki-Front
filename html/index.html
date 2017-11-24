@@ -7,6 +7,11 @@
 </head>
 <body>
 <div id="index">
+  <md-dialog-alert
+          md-content="Something error happens!"
+          md-ok-text="OK"
+          ref="error">
+  </md-dialog-alert>
   <md-toolbar>
     <md-button class="md-icon-button" @click="toggleSidenav">
       <md-icon>menu</md-icon>
@@ -36,12 +41,21 @@
         <div class="md-title">Sasayaki</div>
         <div class="md-subhead">Simple bulletin board.</div>
       </md-card-header>
-      <md-card-content v-if="metamask">
-        <md-input-container>
-          <md-input v-model="new_message" placeholder="new message" :disabled="writing"></md-input>
-        </md-input-container>
-        <md-progress md-indeterminate v-if="writing"></md-progress>
-        <md-button class="md-raised md-primary" @click="post" :disabled="!new_message" v-else>post</md-button>
+      <md-card-content>
+        <div v-if="metamask">
+          <p>To write message, You must possess one or more SSYK.</p>
+          <p>To get SSYK, Please read <a target="_blank" href="https://bitcointalk.org/index.php?topic=2450791">Bitcoin Forum Topic</a>.</p>
+          <md-input-container>
+            <md-input v-model="new_message" placeholder="new message" :disabled="writing"></md-input>
+          </md-input-container>
+          <md-progress md-indeterminate v-if="writing"></md-progress>
+          <md-button class="md-raised md-primary" @click="post" :disabled="!new_message" v-else>post</md-button>
+          <h3 v-if="transactions.length">Now processing transactions</h3>
+          <p v-for="transaction in transactions"><a target="_blank" :href="'https://etherscan.io/tx/' + transaction">{{transaction}}</a></p>
+        </div>
+        <div v-else>
+          <p>To write message, You must enable <a target="_blank" href="https://metamask.io/">MetaMask</a></p>
+        </div>
       </md-card-content>
     </md-card>
   </div>
