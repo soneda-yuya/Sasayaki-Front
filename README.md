@@ -1,5 +1,7 @@
 # Sasayaki
 
+コントラクトは [Sasayaki](https://github.com/yukkurisinai/Sasayaki)
+
 ## License
 
 ```
