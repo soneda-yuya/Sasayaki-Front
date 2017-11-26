@@ -43,6 +43,8 @@
       </md-card-header>
       <md-card-content>
         <div v-if="metamask">
+          <p v-if="account">You are login as {{account}}.</p>
+          <p>You have {{balance}} SSYK.</p>
           <p>To write message, You must possess one or more SSYK.</p>
           <p>To get SSYK, Please read <a target="_blank" href="https://bitcointalk.org/index.php?topic=2450791">Bitcoin Forum Topic</a>.</p>
           <md-input-container>
@@ -54,7 +56,7 @@
           <p v-for="transaction in transactions"><a target="_blank" :href="'https://etherscan.io/tx/' + transaction">{{transaction}}</a></p>
         </div>
         <div v-else>
-          <p>To write message, You must enable <a target="_blank" href="https://metamask.io/">MetaMask</a></p>
+          <p>To use Sasayaki, You must enable <a target="_blank" href="https://metamask.io/">MetaMask</a></p>
         </div>
       </md-card-content>
     </md-card>

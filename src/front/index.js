@@ -14,7 +14,9 @@ const vm = new Vue({
     messages: [],
     web3: undefined,
     contract: undefined,
+    account: '',
     writing: false,
+    balance: 0,
     transactions: [],
   },
   methods: {
@@ -22,48 +24,52 @@ const vm = new Vue({
       this.$refs.sidenav.toggle();
     },
     post() {
-      if (!this.metamask || this.new_message === '') {
+      if (!this.metamask || this.new_message === '' || this.account === '') {
         return;
       }
       this.writing = true;
-      this.web3.eth.getAccounts()
-        .then((accounts) => {
-          try {
-            this.contract.methods.Sasayaku(this.new_message).send({ from: accounts[0] })
-              .on('transactionHash', (hash) => {
-                console.info(hash);
-                this.new_message = '';
-                this.writing = false;
-                this.transactions.push(hash);
-              })
-              .on('receipt', (receipt) => {
-                console.info(receipt);
-                for (let i = 0; i < this.transactions.length; i++) {
-                  if (this.transactions[i] === receipt.transactionHash) {
-                    this.transactions.splice(i, 1);
-                    return;
-                  }
-                }
-                if (receipt.status === '0x0') {
-                  this.$refs.error.open();
-                }
-              })
-              .on('error', (error) => {
-                console.error(error);
-                this.$refs.error.open();
-                this.writing = false;
-                this.transactions = [];
-              });
-          } catch (e) {
-            console.error(e);
+      try {
+        this.contract.methods.Sasayaku(this.new_message).send({ from: this.account })
+          .on('transactionHash', (hash) => {
+            console.info(hash);
+            this.new_message = '';
+            this.writing = false;
+            this.transactions.push(hash);
+          })
+          .on('receipt', (receipt) => {
+            console.info(receipt);
+            for (let i = 0; i < this.transactions.length; i++) {
+              if (this.transactions[i] === receipt.transactionHash) {
+                this.transactions.splice(i, 1);
+                return;
+              }
+            }
+            if (receipt.status === '0x0') {
+              this.$refs.error.open();
+            }
+          })
+          .on('error', (error) => {
+            console.error(error);
             this.$refs.error.open();
             this.writing = false;
             this.transactions = [];
-          }
-        });
+          });
+      } catch (e) {
+        console.error(e);
+        this.$refs.error.open();
+        this.writing = false;
+        this.transactions = [];
+      }
     },
     update() {
-      this.contract.methods.id().call()
+      if (!this.metamask) {
+        return;
+      }
+      this.web3.eth.getAccounts()
+        .then((accounts) => {
+          this.account = accounts[0];
+          return this.contract.methods.id().call();
+        })
         .then((id) => {
           const list = [];
           for (let i = id; i >= 1 && i >= id - 10; i--) {
@@ -73,6 +79,14 @@ const vm = new Vue({
         })
         .then((messages) => {
           this.messages = messages;
+          return this.contract.methods.balanceOf(this.account).call();
+        })
+        .then((balance) => {
+          this.balance = balance;
+          setTimeout(this.update, 1000);
+        })
+        .catch((error) => {
+          console.error(error);
           setTimeout(this.update, 1000);
         });
     },
@@ -82,9 +96,11 @@ const vm = new Vue({
   },
   mounted() {
     this.metamask = !!global.window.web3;
-    this.web3 = new Web3();
-    this.web3.setProvider(this.metamask ? global.window.web3.currentProvider : new this.web3.providers.HttpProvider(config.ethProvider));
-    this.contract = new this.web3.eth.Contract(abi, config.contract);
-    this.update();
+    if (this.metamask) {
+      this.web3 = new Web3();
+      this.web3.setProvider(global.window.web3.currentProvider);
+      this.contract = new this.web3.eth.Contract(abi, config.contract);
+      this.update();
+    }
   },
 });

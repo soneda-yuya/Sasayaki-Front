@@ -16,6 +16,9 @@
       "error",
       { "allow": ["info", "warn", "error"] }
     ],
+    "prefer-destructuring": [
+      "off"
+    ]
   },
   "extends": "airbnb",
   "plugins": [
