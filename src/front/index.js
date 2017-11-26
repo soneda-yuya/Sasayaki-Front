@@ -23,8 +23,11 @@ const vm = new Vue({
     toggleSidenav() {
       this.$refs.sidenav.toggle();
     },
+    postDisabled() {
+      return (!this.metamask || this.new_message === '' || this.account === '' || this.balance === 0);
+    },
     post() {
-      if (!this.metamask || this.new_message === '' || this.account === '') {
+      if (this.postDisabled()) {
         return;
       }
       this.writing = true;
@@ -82,7 +85,7 @@ const vm = new Vue({
           return this.contract.methods.balanceOf(this.account).call();
         })
         .then((balance) => {
-          this.balance = balance;
+          this.balance = Number(balance);
           setTimeout(this.update, 1000);
         })
         .catch((error) => {

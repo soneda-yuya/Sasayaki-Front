@@ -51,7 +51,7 @@
             <md-input v-model="new_message" placeholder="new message" :disabled="writing"></md-input>
           </md-input-container>
           <md-progress md-indeterminate v-if="writing"></md-progress>
-          <md-button class="md-raised md-primary" @click="post" :disabled="!new_message" v-else>post</md-button>
+          <md-button class="md-raised md-primary" @click="post" :disabled="postDisabled()" v-else>post</md-button>
           <h3 v-if="transactions.length">Now processing transactions</h3>
           <p v-for="transaction in transactions"><a target="_blank" :href="'https://etherscan.io/tx/' + transaction">{{transaction}}</a></p>
         </div>
