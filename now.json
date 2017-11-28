@@ -1,0 +1,14 @@
+{
+  "name": "Sasayaki",
+  "alias": [
+    "sasayaki.social"
+  ],
+  "files": [
+    "config/config.json",
+    "src",
+    "public",
+    "html",
+    "webpack.config.js"
+  ]
+}
+
